@@ -7,10 +7,12 @@ import { Detail, Scenario, modeBg, modeBorder, modeColor } from './tokens'
 export function Drawer({
   scenario,
   role,
+  tools = [],
   onClose,
 }: {
   scenario: Scenario | null
   role: string
+  tools?: string[]
   onClose: () => void
 }) {
   const open = !!scenario
@@ -54,6 +56,7 @@ export function Drawer({
         title: scenario.title,
         description: scenario.description,
         role,
+        tools,
       }),
     })
       .then((r) => (r.ok ? r.json() : Promise.reject()))

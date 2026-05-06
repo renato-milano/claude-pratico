@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import Anthropic from '@anthropic-ai/sdk'
+import { getRelevantConnectors } from '@/lib/connectors'
 
 const client = new Anthropic({
   apiKey: process.env.AI_GATEWAY_API_KEY,
@@ -18,7 +19,7 @@ Fornisci:
 Regole:
 - I passi devono essere immediatamente actionable, non teorici
 - Il prompt di esempio deve essere copiabile e funzionare subito, non generico
-- Se la modalità è "Cowork", i passi devono descrivere come delegare il task con Computer Use
+- Se la modalità è "Cowork": controlla prima se esistono connettori Claude disponibili per gli strumenti coinvolti nello scenario. Se sì, i passi devono privilegiare l'uso del connettore (Claude accede direttamente ai dati senza che l'utente copi o incolli nulla). Ricorri a Computer Use solo per le parti del task che non hanno un connettore disponibile, oppure quando serve interazione diretta con la GUI (compilare form, navigare app, cliccare elementi). Mai suggerire Computer Use per aprire un'app se esiste già un connettore per quella stessa app
 - Se la modalità è "Code", i passi devono descrivere come usare la sessione Code con la codebase
 - Se la modalità è "Chat", i passi descrivono come strutturare la conversazione
 - Nessuna emoji
@@ -30,16 +31,18 @@ Formato:
 
 export async function POST(req: NextRequest) {
   try {
-    const { mode, title, description, role } = await req.json()
+    const { mode, title, description, role, tools } = await req.json()
 
     if (!mode || !title || !description) {
       return NextResponse.json({ error: 'Missing fields' }, { status: 400 })
     }
 
+    const connectors = getRelevantConnectors(Array.isArray(tools) ? tools : [])
+
     const message = await client.messages.create({
       model: 'anthropic/claude-sonnet-4-6',
       max_tokens: 1024,
-      system: SYSTEM_PROMPT,
+      system: SYSTEM_PROMPT + (connectors ? '\n' + connectors : ''),
       messages: [
         {
           role: 'user',

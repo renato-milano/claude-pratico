@@ -136,7 +136,7 @@ export default function Home() {
 
       <Footer />
 
-      <Drawer scenario={openScenario} role={roleContext} onClose={() => setOpenScenario(null)} />
+      <Drawer scenario={openScenario} role={roleContext} tools={tools} onClose={() => setOpenScenario(null)} />
     </main>
   )
 }
