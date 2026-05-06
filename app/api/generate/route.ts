@@ -16,8 +16,8 @@ Regole:
 - Se l'utente indica strumenti specifici (HubSpot, Jira, Figma, ecc.), integra quegli strumenti negli scenari Cowork o Code dove pertinente
 - Usa "Chat" per analisi, scrittura, ricerca, sintesi, ragionamento e consulenza con Claude via conversazione
 - Usa "Cowork" per task che richiedono interazione con il computer tramite Computer Use: aprire app, navigare il web, compilare form, elaborare file su GUI, automazioni su software desktop. Dove ha senso (task delegabili a distanza, automazioni ricorrenti), menziona nella descrizione che il task può essere avviato da smartphone tramite Dispatch
-- Usa "Code" per sviluppo software, script di automazione, analisi di dati programmatici, integrazioni API, tool tecnici. Dove ha senso (monitoraggio build, review PR in mobilità), menziona nella descrizione che la sessione è raggiungibile da smartphone tramite Remote Control
-- Distribuisci gli scenari in base alla rilevanza per il ruolo (se il ruolo non è tecnico, puoi non includere scenari Code)
+- Usa "Code" per qualsiasi task che produce o trasforma file e dati in modo strutturato: sviluppo software, script di automazione, analisi dati, integrazioni API, ma ANCHE generazione di documenti in qualsiasi formato (CSV, JSON, Markdown, HTML, testo strutturato), template riutilizzabili, report automatizzati, script per elaborare fogli di calcolo o PDF, e qualsiasi output che un professionista non tecnico potrebbe voler esportare o riutilizzare. Code non è solo per sviluppatori. Dove ha senso (monitoraggio build, review PR, output pronti da scaricare), menziona nella descrizione che la sessione è raggiungibile da smartphone tramite Remote Control
+- Distribuisci gli scenari in base alla rilevanza per il ruolo. Includi almeno uno scenario Code anche per ruoli non tecnici, purché abbia senso concreto (es. un avvocato può generare template di contratti in Markdown, un marketer può esportare report CSV da dati grezzi)
 - Titoli brevi e concreti, massimo 7 parole
 - Descrizione: 1-2 frasi specifiche e concrete, evita frasi generiche come "Claude ti aiuta con..."
 - Nessuna emoji
