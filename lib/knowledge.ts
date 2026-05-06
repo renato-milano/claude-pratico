@@ -2,7 +2,7 @@ import fs from 'fs'
 import path from 'path'
 
 export function getKnowledge(): string {
-  const claudeDir = path.join(process.cwd(), '..', 'claude')
+  const claudeDir = path.join(process.cwd(), 'content')
 
   const chat = fs.readFileSync(path.join(claudeDir, '01_chat.md'), 'utf-8')
   const cowork = fs.readFileSync(path.join(claudeDir, '02_cowork.md'), 'utf-8')
