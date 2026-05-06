@@ -64,7 +64,7 @@ export function NextSteps() {
             className="text-[11px] font-mono-ui uppercase tracking-[0.2em] mb-3"
             style={{ color: 'var(--ink-faint)' }}
           >
-            Capitolo 03 · E dopo?
+            Feature
           </div>
           <h2
             className="font-serif-display text-[28px] md:text-[36px] tracking-tight leading-tight max-w-[38ch]"
