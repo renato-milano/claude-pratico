@@ -183,3 +183,14 @@ export interface Detail {
   steps: string[]
   example_prompt: string
 }
+
+export type ProcessFeature = 'Projects' | 'Skills' | 'Scheduled Tasks'
+
+export interface ProcessStep {
+  step: number
+  mode: Mode
+  feature?: ProcessFeature | null
+  title: string
+  action: string
+  prompt: string
+}

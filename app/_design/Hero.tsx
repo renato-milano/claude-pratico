@@ -214,29 +214,27 @@ function ToolsField({
   resetTools: () => void
 }) {
   const [query, setQuery] = useState('')
+  const [focused, setFocused] = useState(false)
 
   const defaults = sector ? (SECTOR_TOOL_DEFAULTS[sector] ?? []) : []
-  const isCustomized =
-    sector
-      ? tools.length !== defaults.length || tools.some((t) => !defaults.includes(t))
-      : false
+  const isCustomized = sector
+    ? tools.length !== defaults.length || tools.some((t) => !defaults.includes(t))
+    : false
 
   const toolsHint =
     tools.length === 0
       ? 'seleziona tutti quelli che usi'
       : `${tools.length} selezionati${isCustomized ? ' · personalizzati' : ''}`
 
-  const filtered =
-    query.trim().length > 0
-      ? TOOL_CHIPS.filter(
-          (t) =>
-            t.toLowerCase().includes(query.trim().toLowerCase()) && !tools.includes(t)
-        )
+  const q = query.trim().toLowerCase()
+  const listItems: string[] =
+    q.length > 0
+      ? TOOL_CHIPS.filter((t) => t.toLowerCase().includes(q) && !tools.includes(t))
       : []
 
   const canAddCustom =
-    query.trim().length > 1 &&
-    !TOOL_CHIPS.some((t) => t.toLowerCase() === query.trim().toLowerCase()) &&
+    q.length > 1 &&
+    !TOOL_CHIPS.some((t) => t.toLowerCase() === q) &&
     !tools.includes(query.trim())
 
   const handleAdd = (name: string) => {
@@ -246,25 +244,25 @@ function ToolsField({
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
-      if (filtered.length > 0) handleAdd(filtered[0])
+      if (listItems.length > 0) handleAdd(listItems[0])
       else if (canAddCustom) handleAdd(query.trim())
     }
   }
 
+  const showList = focused && (listItems.length > 0 || canAddCustom)
+
   return (
     <Field index="03" label="Strumenti del tuo stack" hint={toolsHint}>
       <div className="space-y-3">
+
+        {/* Selected pills — originale */}
         {tools.length > 0 && (
           <div className="flex flex-wrap gap-2 items-center">
             {tools.map((t) => (
               <span
                 key={t}
                 className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[13px] font-mono-ui"
-                style={{
-                  background: 'var(--ink)',
-                  color: 'var(--paper)',
-                  border: '1px solid var(--ink)',
-                }}
+                style={{ background: 'var(--ink)', color: 'var(--paper)', border: '1px solid var(--ink)' }}
               >
                 {TOOL_ITEM_MAP[t] && (
                   <span style={{ opacity: 0.7, display: 'flex' }}>
@@ -296,71 +294,79 @@ function ToolsField({
           </div>
         )}
 
+        {/* Search input + lista filtrata */}
         <div
-          className="flex items-center gap-3 px-4 py-3 rounded-xl transition-all"
-          style={{ border: '1px solid var(--line)', background: 'var(--paper-soft)' }}
-          onFocus={(e) => (e.currentTarget.style.borderColor = 'var(--ink-muted)')}
-          onBlur={(e) => (e.currentTarget.style.borderColor = 'var(--line)')}
+          className="rounded-xl overflow-hidden"
+          style={{ border: `1px solid ${focused ? 'var(--ink-muted)' : 'var(--line)'}`, background: 'var(--paper-soft)', transition: 'border-color 150ms' }}
         >
-          <svg
-            width="13" height="13" viewBox="0 0 24 24" fill="none"
-            stroke="currentColor" strokeWidth="2.2" style={{ color: 'var(--ink-faint)', flexShrink: 0 }}
-          >
-            <circle cx="11" cy="11" r="8" />
-            <path d="m21 21-4.35-4.35" />
-          </svg>
-          <input
-            type="text"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            onKeyDown={handleKeyDown}
-            placeholder="Cerca o aggiungi – es. mail, excel, oppure il tuo tool custom"
-            className="flex-1 text-[13px] bg-transparent focus:outline-none"
-            style={{ color: 'var(--ink)' }}
-          />
-          <span className="text-[11px] font-mono-ui flex-shrink-0" style={{ color: 'var(--ink-faint)' }}>
-            {TOOL_CHIPS.length}+ tool
-          </span>
+          <div className="flex items-center gap-3 px-4 py-3">
+            <svg
+              width="13" height="13" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" strokeWidth="2.2"
+              style={{ color: 'var(--ink-faint)', flexShrink: 0 }}
+            >
+              <circle cx="11" cy="11" r="8" />
+              <path d="m21 21-4.35-4.35" />
+            </svg>
+            <input
+              type="text"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              onKeyDown={handleKeyDown}
+              onFocus={() => setFocused(true)}
+              onBlur={() => setTimeout(() => setFocused(false), 150)}
+              placeholder="Cerca strumenti o aggiungine uno custom…"
+              className="flex-1 text-[13px] bg-transparent focus:outline-none"
+              style={{ color: 'var(--ink)' }}
+            />
+            <span className="text-[11px] font-mono-ui flex-shrink-0" style={{ color: 'var(--ink-faint)' }}>
+              {TOOL_CHIPS.length}+
+            </span>
+          </div>
+
+          {showList && (
+            <ul style={{ borderTop: '1px solid var(--line)', maxHeight: 220, overflowY: 'auto' }}>
+              {listItems.slice(0, 10).map((t, i) => (
+                <li key={t}>
+                  <button
+                    type="button"
+                    onMouseDown={() => handleAdd(t)}
+                    className="w-full flex items-center gap-3 px-4 py-2.5 text-[13px] text-left transition-colors"
+                    style={{
+                      color: 'var(--ink-muted)',
+                      borderBottom: i < Math.min(listItems.length, 10) - 1 ? '1px solid var(--line)' : 'none',
+                    }}
+                    onMouseEnter={(e) => (e.currentTarget.style.background = 'var(--paper)')}
+                    onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
+                  >
+                    {TOOL_ITEM_MAP[t] && (
+                      <span style={{ opacity: 0.45, display: 'flex', flexShrink: 0 }}>
+                        <ToolIcon slug={TOOL_ITEM_MAP[t]} size={12} />
+                      </span>
+                    )}
+                    <span>{t}</span>
+                    <span className="ml-auto text-[11px] font-mono-ui" style={{ color: 'var(--ink-faint)' }}>+</span>
+                  </button>
+                </li>
+              ))}
+              {canAddCustom && (
+                <li>
+                  <button
+                    type="button"
+                    onMouseDown={() => handleAdd(query.trim())}
+                    className="w-full flex items-center gap-3 px-4 py-2.5 text-[13px] text-left transition-colors"
+                    style={{ color: 'var(--ink-faint)' }}
+                    onMouseEnter={(e) => (e.currentTarget.style.background = 'var(--paper)')}
+                    onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
+                  >
+                    + Aggiungi &ldquo;{query.trim()}&rdquo;
+                  </button>
+                </li>
+              )}
+            </ul>
+          )}
         </div>
 
-        {query.trim().length > 0 && (filtered.length > 0 || canAddCustom) && (
-          <div className="flex flex-wrap gap-2">
-            {filtered.slice(0, 10).map((t) => (
-              <button
-                key={t}
-                type="button"
-                onClick={() => handleAdd(t)}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[13px] font-mono-ui transition-all hover:opacity-70"
-                style={{
-                  border: '1px solid var(--line)',
-                  color: 'var(--ink-muted)',
-                  background: 'var(--paper)',
-                }}
-              >
-                {TOOL_ITEM_MAP[t] && (
-                  <span style={{ opacity: 0.55, display: 'flex' }}>
-                    <ToolIcon slug={TOOL_ITEM_MAP[t]} size={11} />
-                  </span>
-                )}
-                {t}
-              </button>
-            ))}
-            {canAddCustom && (
-              <button
-                type="button"
-                onClick={() => handleAdd(query.trim())}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[13px] font-mono-ui transition-all hover:opacity-70"
-                style={{
-                  border: '1px dashed var(--ink-faint)',
-                  color: 'var(--ink-faint)',
-                  background: 'transparent',
-                }}
-              >
-                + Aggiungi &ldquo;{query.trim()}&rdquo;
-              </button>
-            )}
-          </div>
-        )}
       </div>
     </Field>
   )

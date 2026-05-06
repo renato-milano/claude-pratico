@@ -8,6 +8,7 @@ import { Drawer } from './_design/Drawer'
 import { SkeletonGrid } from './_design/SkeletonGrid'
 import { Footer } from './_design/Footer'
 import { NextSteps } from './_design/NextSteps'
+import { ProcessSection } from './_design/ProcessSection'
 import { Mode, Scenario, SECTOR_TOOL_DEFAULTS } from './_design/tokens'
 
 export default function Home() {
@@ -70,7 +71,7 @@ export default function Home() {
       const data = await res.json()
       setScenarios(data.scenarios)
     } catch {
-      setError('Errore nella generazione. Controlla la connessione e riprova.')
+      setError('Ci sono molti utenti in coda, riprova tra qualche minuto.')
     } finally {
       setLoading(false)
     }
@@ -125,7 +126,10 @@ export default function Home() {
       )}
 
       {hasResults && !loading && grouped && (
-        <Kanban scenarios={grouped} onOpen={(s) => setOpenScenario(s)} roleContext={roleContext} />
+        <>
+          <Kanban scenarios={grouped} onOpen={(s) => setOpenScenario(s)} roleContext={roleContext} />
+          <ProcessSection roleContext={roleContext} tools={tools} />
+        </>
       )}
 
       <NextSteps />
