@@ -1,0 +1,68 @@
+/* Claude Potential Map — Editorial Warm */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* warm sand/clay system */
+  --paper:        oklch(0.985 0.008 75);
+  --paper-soft:   oklch(0.965 0.014 75);
+  --paper-deep:   oklch(0.945 0.020 75);
+  --ink:          oklch(0.22 0.012 50);
+  --ink-muted:    oklch(0.45 0.018 50);
+  --ink-faint:    oklch(0.62 0.022 55);
+  --line:         oklch(0.91 0.012 70);
+  --line-strong:  oklch(0.84 0.015 65);
+  --clay:         oklch(0.55 0.13 35);
+
+  /* mode hues — same chroma & lightness, varied hue */
+  --hue-chat: 285;
+  --hue-cowork: 35;
+  --hue-code: 245;
+}
+
+@layer base {
+  * { box-sizing: border-box; }
+  html, body { background: var(--paper); }
+  body {
+    color: var(--ink);
+    font-family: var(--font-sans, 'Inter'), system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  ::selection { background: oklch(0.85 0.10 35); color: var(--ink); }
+}
+
+@layer utilities {
+  .font-serif-display {
+    font-family: var(--font-serif, 'Fraunces'), Georgia, serif;
+    font-optical-sizing: auto;
+  }
+  .font-mono-ui {
+    font-family: var(--font-mono, 'JetBrains Mono'), ui-monospace, Menlo, monospace;
+  }
+  .shimmer {
+    background: linear-gradient(90deg, var(--paper-soft) 25%, var(--paper-deep) 50%, var(--paper-soft) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.6s linear infinite;
+  }
+  .stagger-in {
+    opacity: 0;
+    transform: translateY(8px);
+    animation: rise 520ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+@keyframes rise {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* drawer scrollbar */
+aside::-webkit-scrollbar { width: 6px; }
+aside::-webkit-scrollbar-thumb { background: var(--line-strong); border-radius: 3px; }
+aside::-webkit-scrollbar-track { background: transparent; }
