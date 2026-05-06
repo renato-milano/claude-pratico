@@ -92,7 +92,7 @@ function FeatureCard({
 }: {
   feature: (typeof FEATURES)[number]
 }) {
-  const { index, name, mode, tagline, description, plan } = feature
+  const { index, name, mode, tagline, description } = feature
 
   return (
     <div
