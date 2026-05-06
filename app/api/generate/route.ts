@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import Anthropic from '@anthropic-ai/sdk'
 import { getKnowledge } from '@/lib/knowledge'
+import { getRelevantConnectors } from '@/lib/connectors'
 
 const client = new Anthropic({
   apiKey: process.env.AI_GATEWAY_API_KEY,
@@ -34,18 +35,19 @@ BASE DI CONOSCENZA SULLE MODALITA' DI CLAUDE:
 
 export async function POST(req: NextRequest) {
   try {
-    const { role } = await req.json()
+    const { role, tools } = await req.json()
 
     if (!role || typeof role !== 'string' || role.trim().length === 0) {
       return NextResponse.json({ error: 'Role is required' }, { status: 400 })
     }
 
     const knowledge = getKnowledge()
+    const connectors = getRelevantConnectors(Array.isArray(tools) ? tools : [])
 
     const message = await client.messages.create({
       model: 'anthropic/claude-sonnet-4-6',
       max_tokens: 2048,
-      system: SYSTEM_PROMPT + knowledge,
+      system: SYSTEM_PROMPT + knowledge + connectors,
       messages: [
         {
           role: 'user',
