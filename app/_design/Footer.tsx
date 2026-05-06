@@ -40,13 +40,10 @@ export function Footer() {
           </div>
           <ul className="space-y-2 text-[13px]" style={{ color: 'var(--ink-muted)' }}>
             <li>
-              <a className="hover:underline cursor-pointer">Documentazione</a>
+              <a className="hover:underline" href="https://docs.anthropic.com" target="_blank" rel="noreferrer">Documentazione Claude</a>
             </li>
             <li>
-              <a className="hover:underline cursor-pointer">Cambia lingua</a>
-            </li>
-            <li>
-              <a className="hover:underline cursor-pointer">Esporta come PDF</a>
+              <a className="hover:underline" href="https://claude.ai" target="_blank" rel="noreferrer">Apri Claude</a>
             </li>
           </ul>
         </div>
@@ -59,13 +56,10 @@ export function Footer() {
           </div>
           <ul className="space-y-2 text-[13px]" style={{ color: 'var(--ink-muted)' }}>
             <li>
-              <a className="hover:underline cursor-pointer" href="https://holyn.it" target="_blank" rel="noreferrer">Studio</a>
+              <a className="hover:underline" href="https://holyn.it" target="_blank" rel="noreferrer">Studio</a>
             </li>
             <li>
-              <a className="hover:underline cursor-pointer">Casi studio</a>
-            </li>
-            <li>
-              <a className="hover:underline cursor-pointer">Contatti</a>
+              <a className="hover:underline" href="https://www.holyn.it/#contact" target="_blank" rel="noreferrer">Contatti</a>
             </li>
           </ul>
         </div>
@@ -89,7 +83,7 @@ export function Footer() {
           className="col-span-12 pt-8 mt-2 flex items-center justify-between text-[11px] font-mono-ui flex-wrap gap-2"
           style={{ borderTop: '1px solid var(--line)', color: 'var(--ink-faint)' }}
         >
-          <span>© 2026 Holyn — Studio di consulenza AI · Milano</span>
+          <span>© 2026 Holyn · Studio di consulenza AI · Milano</span>
           <span>Made with care · v1.2</span>
         </div>
       </div>
