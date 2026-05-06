@@ -7,6 +7,7 @@ import { Kanban } from './_design/Kanban'
 import { Drawer } from './_design/Drawer'
 import { SkeletonGrid } from './_design/SkeletonGrid'
 import { Footer } from './_design/Footer'
+import { NextSteps } from './_design/NextSteps'
 import { Mode, Scenario, SECTOR_TOOL_DEFAULTS } from './_design/tokens'
 
 export default function Home() {
@@ -124,8 +125,10 @@ export default function Home() {
       )}
 
       {hasResults && !loading && grouped && (
-        <Kanban scenarios={grouped} onOpen={(s) => setOpenScenario(s)} />
+        <Kanban scenarios={grouped} onOpen={(s) => setOpenScenario(s)} roleContext={roleContext} />
       )}
+
+      <NextSteps />
 
       <Footer />
 

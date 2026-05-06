@@ -1,18 +1,31 @@
 'use client'
 
 import { useState } from 'react'
+import { generatePDF } from '@/lib/generatePDF'
 import { Dot } from './Primitives'
 import { Mode, MODES, Scenario, modeBg, modeBorder, modeColor } from './tokens'
 
 export function Kanban({
   scenarios,
   onOpen,
+  roleContext = '',
 }: {
   scenarios: Record<Mode, Scenario[]>
   onOpen: (s: Scenario) => void
+  roleContext?: string
 }) {
   const modes = ['Chat', 'Cowork', 'Code'] as Mode[]
   const total = modes.reduce((acc, m) => acc + (scenarios[m]?.length ?? 0), 0)
+  const [exporting, setExporting] = useState(false)
+
+  const handleExportPDF = async () => {
+    setExporting(true)
+    try {
+      await generatePDF(scenarios, roleContext)
+    } finally {
+      setExporting(false)
+    }
+  }
 
   return (
     <section className="max-w-[1280px] mx-auto px-6 md:px-8 pb-20 md:pb-24">
@@ -34,7 +47,9 @@ export function Kanban({
             </h2>
           </div>
           <div className="hidden md:flex items-center gap-2">
-            <ToolbarButton>Esporta PDF</ToolbarButton>
+            <ToolbarButton onClick={handleExportPDF} disabled={exporting}>
+              {exporting ? 'Generazione…' : 'Esporta PDF'}
+            </ToolbarButton>
             <ToolbarButton>Copia link</ToolbarButton>
           </div>
         </div>
@@ -88,12 +103,13 @@ export function Kanban({
   )
 }
 
-function ToolbarButton({ children, onClick }: { children: React.ReactNode; onClick?: () => void }) {
+function ToolbarButton({ children, onClick, disabled }: { children: React.ReactNode; onClick?: () => void; disabled?: boolean }) {
   return (
     <button
       type="button"
       onClick={onClick}
-      className="px-3.5 py-2 text-[12px] font-mono-ui rounded-lg transition-colors hover:opacity-80"
+      disabled={disabled}
+      className="px-3.5 py-2 text-[12px] font-mono-ui rounded-lg transition-colors hover:opacity-80 disabled:opacity-40 disabled:cursor-not-allowed"
       style={{ border: '1px solid var(--line)', color: 'var(--ink-muted)' }}
     >
       {children}

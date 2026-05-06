@@ -25,7 +25,7 @@ const jetbrains = JetBrains_Mono({
 
 export const metadata: Metadata = {
   title: 'Claude Potential Map',
-  description: 'Scopri come Claude può trasformare il tuo lavoro quotidiano',
+  description: 'Descrivi il tuo ruolo e scopri scenari concreti su come Claude può aiutarti ogni giorno, in Chat, Cowork e Code.',
   icons: {
     icon: [
       { url: '/favicon-16.png', sizes: '16x16', type: 'image/png' },

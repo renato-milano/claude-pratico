@@ -49,10 +49,11 @@ export function Hero({ form, onKeyDown }: { form: FormState; onKeyDown: (e: Keyb
           className="text-[16px] md:text-[17px] leading-relaxed max-w-[52ch] mb-10 md:mb-12"
           style={{ color: 'var(--ink-muted)' }}
         >
-          Descrivi il tuo ruolo, il settore e gli strumenti che usi. Tre modi di lavorare con
-          Claude — <span style={{ color: modeColor('Chat') }}>chat</span>,{' '}
+          Descrivi il tuo ruolo, il settore e gli strumenti che usi. I tre modi di lavorare con
+          Claude ({' '}
+          <span style={{ color: modeColor('Chat') }}>chat</span>,{' '}
           <span style={{ color: modeColor('Cowork') }}>cowork</span> e{' '}
-          <span style={{ color: modeColor('Code') }}>code</span> — diventano scenari reali, calati
+          <span style={{ color: modeColor('Code') }}>code</span>) diventano scenari reali, calati
           sulla tua giornata.
         </p>
 
